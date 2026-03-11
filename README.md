@@ -1,140 +1,67 @@
 # CIFAR-10 Image Classification
 
-🖼️ **Project Type:** Deep Learning – Image Classification  
-📅 **Original project completion:** November – December 2024  
-📤 **Repository updated & published:** February 2026  
-📦 **Dataset:** CIFAR-10 (Canadian Institute for Advanced Research)
+A convolutional neural network implementation for classifying 32x32 RGB images into one of ten object categories using the CIFAR-10 benchmark dataset.
 
----
+Implemented in late 2024 as part of structured self-learning in deep learning. Repository published in 2026 for portfolio use.
 
-## 📌 Project Overview
+## Dataset
 
-This project implements a deep learning–based image classification system using the **CIFAR-10 dataset**, a widely used benchmark in computer vision research and education.
+CIFAR-10 (Canadian Institute for Advanced Research) contains 60,000 colour images across ten classes: airplane, automobile, bird, cat, deer, dog, frog, horse, ship, and truck. The dataset is split into 50,000 training and 10,000 test images. It is downloaded automatically by Keras on first run.
 
-The objective is to train and evaluate convolutional neural networks (CNNs) capable of classifying small RGB images into one of ten object categories. The project demonstrates the complete workflow for building, training, and evaluating deep learning models for image recognition tasks.
+## Architecture
 
-The core implementation was completed in **late 2024** as part of structured self-learning in deep learning.  
-The repository was **cleaned, documented, and published in February 2026** for portfolio and demonstration purposes.
+The custom CNN uses three convolutional blocks followed by a fully connected classifier:
 
----
+- Block 1: two Conv2D(32) layers with BatchNorm and 0.25 Dropout
+- Block 2: two Conv2D(64) layers with BatchNorm and 0.25 Dropout
+- Block 3: two Conv2D(128) layers with BatchNorm and 0.25 Dropout
+- Dense(128) with ReLU and 0.25 Dropout
+- Dense(10) with Softmax output
 
-## 🧠 Problem Statement
+The model is trained with the Adam optimiser, categorical cross-entropy loss, and data augmentation (horizontal flips and small shifts) via ImageDataGenerator. A secondary experiment with DenseNet121 (pretrained on ImageNet) is also included in the notebook.
 
-Given a 32×32 RGB image, predict which of the following 10 classes it belongs to:
+## Results
 
-- Airplane  
-- Automobile  
-- Bird  
-- Cat  
-- Deer  
-- Dog  
-- Frog  
-- Horse  
-- Ship  
-- Truck  
+The custom CNN achieves approximately 75-82% test accuracy after 50 epochs, depending on random initialisation. Results are consistent with standard CNN baselines on CIFAR-10 without advanced techniques such as residual connections or label smoothing.
 
----
+## Requirements
 
-## 🎯 Project Objectives
+- Python 3.9 or later
+- See requirements.txt for package versions
 
-- Understand and preprocess image data for deep learning  
-- Design and train convolutional neural networks  
-- Apply data normalization and augmentation techniques  
-- Evaluate model performance using accuracy and loss metrics  
-- Analyse model behaviour across different object classes  
+## Running the notebook
 
----
+```bash
+git clone https://github.com/LAKSHAY-ATREJA/CIFAR-10.git
+cd CIFAR-10
 
-## 🛠️ Technologies & Libraries Used
+python3 -m venv venv
+source venv/bin/activate        # Windows: venv\Scripts\activate
+pip install -r requirements.txt
 
-- **Python**
-- **TensorFlow / Keras** *(or PyTorch – adjust if needed)*
-- **NumPy**
-- **Matplotlib**
-- **Scikit-learn** (evaluation utilities)
+jupyter notebook CIFAR.ipynb
+```
 
----
+The notebook downloads the CIFAR-10 dataset automatically on first run (approximately 170 MB). Training 50 epochs takes roughly 15-30 minutes on a CPU and 3-5 minutes with a GPU.
 
-## 🔍 Methodology
+## Notebook structure
 
-### 1. Dataset Preparation
-- Loaded CIFAR-10 dataset using built-in deep learning utilities
-- Normalised pixel values to improve convergence
-- Split data into training and test sets
+| Section                   | Description                                            |
+|---------------------------|--------------------------------------------------------|
+| Data loading              | Download CIFAR-10, inspect shapes                      |
+| Exploratory visualisation | 10x10 image grid, class distribution bar chart         |
+| Preprocessing             | Pixel normalisation to [0,1], one-hot encoding         |
+| Model definition          | Custom 3-block CNN with BatchNorm and Dropout          |
+| Training                  | 50 epochs with data augmentation                       |
+| Evaluation                | Loss/accuracy curves, confusion matrix, classification report |
+| Inference demo            | Per-image prediction with confidence bar charts        |
+| Transfer learning         | DenseNet121 fine-tuning experiment                     |
 
-### 2. Model Architecture
-- Convolutional Neural Network (CNN) with:
-  - Convolutional layers
-  - ReLU activations
-  - Max pooling layers
-  - Fully connected layers
-  - Softmax output layer
+## Known bugs fixed
 
-### 3. Training
-- Optimiser: Adam
-- Loss function: Categorical Cross-Entropy
-- Batch training with validation monitoring
+- Corrected `X_train[index, 1:]` to `X_train[index]` in the image grid cells. The original slice dropped the first pixel row of every displayed image without affecting model training.
+- Replaced bare `pip install` magic command with `subprocess.check_call` for compatibility across notebook environments.
 
-### 4. Evaluation
-- Accuracy and loss evaluation on test dataset
-- Confusion matrix and class-wise performance analysis
-- Visual inspection of predictions on sample images
+## License
 
----
-
-## 📊 Results Summary
-
-- **Final test accuracy:** ~70–80% (depending on architecture and training configuration)
-- The model performs well on structured objects (e.g. ships, automobiles)
-- Lower accuracy observed for visually similar classes (e.g. cats vs dogs)
-
-These results are consistent with standard CNN baselines on the CIFAR-10 dataset.
-
----
-
-## 📂 Repository Structure
-
-
-
-├── data/
-│ └── cifar10/
-├── notebooks/
-│ └── cifar10_classification.ipynb
-├── models/
-│ └── saved_model/
-├── images/
-│ └── sample_predictions.png
-├── requirements.txt
-├── README.md
-
-
-
-
----
-
-## 📝 Project History
-
-- **Late 2024**
-  - Implemented CNN-based classification pipeline
-  - Trained and evaluated models on CIFAR-10
-  - Experimented with architecture depth and hyperparameters
-
-- **February 2026**
-  - Refactored codebase
-  - Added documentation and visualisations
-  - Published repository publicly for portfolio use
-
----
-
-## ⚠️ Disclaimer
-
-This project is intended as a **learning and demonstration project** using a standard computer vision benchmark dataset.  
-It is **not presented as novel research or production-grade software**.
-
----
-
-## 📚 Dataset Reference
-
-CIFAR-10 Dataset  
-Canadian Institute for Advanced Research  
-https://www.cs.toronto.edu/~kriz/cifar.html
+MIT. Built by Lakshay Atreja.
